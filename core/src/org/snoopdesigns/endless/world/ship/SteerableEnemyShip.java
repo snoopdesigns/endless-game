@@ -95,6 +95,8 @@ public class SteerableEnemyShip extends SteerablePhysicalBody implements Rendera
         sprite.setCenter(getBody().getPosition().x, getBody().getPosition().y);
         sprite.setRotation(MathUtils.radDeg * getBody().getAngle());
         sprite.draw(batch);
+
+        limitVelocity();
     }
 
     @Override
