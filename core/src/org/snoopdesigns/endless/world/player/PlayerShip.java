@@ -32,11 +32,25 @@ public final class PlayerShip extends PhysicalBody implements Controllable, Rend
     @Override
     public FixtureDef getFixture() {
         final CircleShape circle = new CircleShape();
-        circle.setRadius(7f);
+        circle.setRadius(5f);
         final FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = circle;
-        fixtureDef.density = 1f; // weight of body
         return fixtureDef;
+    }
+
+    @Override
+    public float getMass() {
+        return 10000; // 10 tons
+    }
+
+    @Override
+    public float getLinearDamping() {
+        return 1.5f;
+    }
+
+    @Override
+    public float getMaxVelocity() {
+        return 100f; // meters per second
     }
 
     @Override
@@ -45,13 +59,20 @@ public final class PlayerShip extends PhysicalBody implements Controllable, Rend
 
         final Texture texture = new Texture(Gdx.files.internal("ship.png"));
         sprite = new Sprite(texture);
-        sprite.setScale(0.1f);
+
+        final float expectedSizeInMeters = 15f;
+        final Vector2 scale = new Vector2(
+                expectedSizeInMeters / sprite.getHeight(),
+                expectedSizeInMeters / sprite.getWidth());
+
+        sprite.setScale(scale.x, scale.y);
     }
 
     @Override
     public void render(SpriteBatch batch) {
         handleInput();
         handleMousePosition();
+
         final float x = getBody().getPosition().x;
         final float y = getBody().getPosition().y;
         Context.getInstance().getCameraContext().getPosition().set(x, y);
@@ -73,6 +94,8 @@ public final class PlayerShip extends PhysicalBody implements Controllable, Rend
         sprite.draw(batch);
         effects.forEach(effect ->
                 effect.draw(batch, Gdx.graphics.getDeltaTime()));
+
+        limitVelocity();
     }
 
     @Override
@@ -104,22 +127,14 @@ public final class PlayerShip extends PhysicalBody implements Controllable, Rend
     }
 
     private void speedUp() {
-        final float force = 100000.0f;
+        final float force = getBody().getMass() * 200; // force 200x times more than self mass
         final Vector2 impulse = new Vector2(force, 0).rotateRad(getBody().getAngle());
         getBody().applyForceToCenter(impulse, true);
-    }
-
-    private void slowDown() {
-        getBody().setLinearVelocity(
-                getBody().getLinearVelocity().x * 0.98f,
-                getBody().getLinearVelocity().y * 0.98f);
     }
 
     private void handleInput() {
         if (Gdx.input.isKeyPressed(Keys.SPACE)) {
             speedUp();
-        } else {
-            slowDown();
         }
     }
 

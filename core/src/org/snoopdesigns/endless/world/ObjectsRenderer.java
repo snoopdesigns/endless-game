@@ -6,7 +6,6 @@ import java.util.List;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import org.snoopdesigns.endless.context.Context;
 import org.snoopdesigns.endless.renderer.Renderer;
-import org.snoopdesigns.endless.world.ship.SteerableEnemyShip;
 
 public class ObjectsRenderer implements Renderer {
 
@@ -18,9 +17,9 @@ public class ObjectsRenderer implements Renderer {
     public void create() {
         batch = new SpriteBatch();
         renderables.add(Context.getInstance().getPlayerShip());
-        renderables.add(new SteerableEnemyShip());
-        renderables.add(new SteerableEnemyShip());
-        renderables.add(new SteerableEnemyShip());
+        //renderables.add(new SteerableEnemyShip());
+        //renderables.add(new SteerableEnemyShip());
+        //renderables.add(new SteerableEnemyShip());
 
         renderables.forEach(Renderable::create);
     }

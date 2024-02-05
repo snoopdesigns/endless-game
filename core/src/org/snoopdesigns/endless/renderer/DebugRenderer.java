@@ -24,12 +24,12 @@ public class DebugRenderer implements Renderer {
         batch.begin();
         final String debugText = String.format("""
                 window size %d x %d
-                viewport %f %f
-                zoom %f
-                position %f %f
-                angle %f
-                speed %f
-                velocity %f %f
+                viewport %.1f %.1f
+                zoom %.1f
+                position %.1f %.1f
+                angle %.1f
+                speed %.1f m/s
+                velocity %.1f %.1f
                 """,
                 Gdx.graphics.getWidth(),
                 Gdx.graphics.getHeight(),

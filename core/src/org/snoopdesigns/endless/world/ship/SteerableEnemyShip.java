@@ -41,8 +41,22 @@ public class SteerableEnemyShip extends SteerablePhysicalBody implements Rendera
         circle.setRadius(7f);
         final FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = circle;
-        fixtureDef.density = 1f;
         return fixtureDef;
+    }
+
+    @Override
+    public float getMass() {
+        return 10000;
+    }
+
+    @Override
+    public float getLinearDamping() {
+        return 1.5f;
+    }
+
+    @Override
+    public float getMaxVelocity() {
+        return 50;
     }
 
     @Override
