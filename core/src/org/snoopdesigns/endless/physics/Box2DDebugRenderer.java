@@ -47,14 +47,13 @@ public class Box2DDebugRenderer implements Renderer {
                 s %.1f m/s
                 v %.1f %.1f
                 """,
-                    Context.getInstance().getCameraContext().getPosition().x,
-                    Context.getInstance().getCameraContext().getPosition().y,
-                    Context.getInstance().getPlayerShip().getBody().getAngle(),
-                    Context.getInstance().getPlayerShip().getBody().getLinearVelocity().len(),
-                    Context.getInstance().getPlayerShip().getBody().getLinearVelocity().x,
-                    Context.getInstance().getPlayerShip().getBody().getLinearVelocity().y);
+                    body.getPosition().x,
+                    body.getPosition().y,
+                    body.getAngle(),
+                    body.getLinearVelocity().len(),
+                    body.getLinearVelocity().x,
+                    body.getLinearVelocity().y);
             font.draw(batch, debugText, body.getPosition().x + 5f, body.getPosition().y - 5f);
-            //ont.draw(batch, debugText, 10f, 190f);
         });
         batch.end();
     }

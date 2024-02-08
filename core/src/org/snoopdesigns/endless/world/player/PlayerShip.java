@@ -1,12 +1,8 @@
 package org.snoopdesigns.endless.world.player;
 
-import java.util.LinkedList;
-import java.util.Queue;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
@@ -18,11 +14,11 @@ import org.snoopdesigns.endless.context.Context;
 import org.snoopdesigns.endless.physics.PhysicalBody;
 import org.snoopdesigns.endless.world.Controllable;
 import org.snoopdesigns.endless.world.Renderable;
+import org.snoopdesigns.endless.world.effects.EngineEffect;
 
 public final class PlayerShip extends PhysicalBody implements Controllable, Renderable {
-
-    private final Queue<ParticleEffect> effects = new LinkedList<>();
     private Sprite sprite;
+    private EngineEffect effect;
 
     @Override
     public BodyType getBodyType() {
@@ -66,6 +62,8 @@ public final class PlayerShip extends PhysicalBody implements Controllable, Rend
                 expectedSizeInMeters / sprite.getWidth());
 
         sprite.setScale(scale.x, scale.y);
+
+        effect = new EngineEffect(this);
     }
 
     @Override
@@ -80,20 +78,8 @@ public final class PlayerShip extends PhysicalBody implements Controllable, Rend
         sprite.setCenter(x, y);
         sprite.setRotation(MathUtils.radDeg * getBody().getAngle());
 
-        effects.removeIf(ParticleEffect::isComplete);
-        effects.forEach(effect -> {
-            final Vector2 effectOffset = new Vector2(-5f, 0f).rotateRad(getBody().getAngle());
-            effect.setPosition(x + effectOffset.x, y + effectOffset.y);
-            effect.getEmitters().forEach(emitter -> {
-                final float effectRotation = MathUtils.radDeg * getBody().getAngle();
-                emitter.getAngle().setLow(effectRotation);
-                emitter.getAngle().setHigh(effectRotation);
-            });
-        });
-
         sprite.draw(batch);
-        effects.forEach(effect ->
-                effect.draw(batch, Gdx.graphics.getDeltaTime()));
+        effect.render(batch);
 
         limitVelocity();
     }
@@ -105,13 +91,7 @@ public final class PlayerShip extends PhysicalBody implements Controllable, Rend
     @Override
     public boolean keyDown(int keycode) {
         if (keycode == Keys.SPACE) {
-            final ParticleEffect effect = new ParticleEffect();
-            effect.load(Gdx.files.internal("particles.p"), Gdx.files.internal(""));
-            effect.setPosition(
-                    getBody().getPosition().x,
-                    getBody().getPosition().y);
             effect.start();
-            effects.add(effect);
             return true;
         }
         return false;
@@ -120,7 +100,7 @@ public final class PlayerShip extends PhysicalBody implements Controllable, Rend
     @Override
     public boolean keyUp(int keycode) {
         if (keycode == Keys.SPACE) {
-            effects.forEach(ParticleEffect::allowCompletion);
+            effect.stop();
             return true;
         }
         return false;
