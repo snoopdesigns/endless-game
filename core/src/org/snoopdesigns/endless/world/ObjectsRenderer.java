@@ -20,7 +20,7 @@ public class ObjectsRenderer implements Renderer {
         batch = new SpriteBatch();
         renderables.add(Context.getInstance().getPlayerShip());
 
-        IntStream.range(0, 1).forEach(i ->
+        IntStream.range(0, 3).forEach(i ->
                 renderables.add(new SteerableEnemyShip()));
 
         renderables.forEach(Renderable::create);

@@ -37,7 +37,6 @@ public abstract class PhysicalBody {
 
     public void limitVelocity() {
         if (getBody().getLinearVelocity().len() > getMaxVelocity()) {
-            System.out.println("Limit velocity" + getMaxVelocity());
             getBody().setLinearVelocity(getBody().getLinearVelocity().limit(getMaxVelocity()));
         }
     }
