@@ -1,8 +1,8 @@
 package org.snoopdesigns.endless.config;
 
 public final class Config {
-    private static int screenWidth = 1280;
-    private static int screenHeight = 720;
+    private static int screenWidth = 1900;
+    private static int screenHeight = 1200;
 
     private Config() {
     }
